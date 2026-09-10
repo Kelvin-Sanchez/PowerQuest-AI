@@ -1,0 +1,4 @@
+pyboy
+numpy
+supabase
+python-dotenv
