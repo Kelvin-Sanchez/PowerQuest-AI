@@ -19,3 +19,13 @@ Setup:
 1. Create a Supabase project and apply `supabase/migrations/20260910145732_create_pq_memory_addresses.sql` against it (via the Supabase CLI, GitHub integration, or pasted into the SQL editor).
 2. Set `SUPABASE_URL` and `SUPABASE_KEY` (anon key) as environment variables, or in a local `.env` file (already gitignored — never commit this). This is all `pq_memory_map.py` needs at runtime.
 3. To (re)seed the table, also set `SUPABASE_SERVICE_KEY` (service_role key) and run `python supabase/seed_memory_map.py` once. This key should only ever be used locally for this step, never deployed with the running agent.
+
+## Dev Environment (Nix)
+
+`pyboy` and `numpy` ship as pip binary wheels that expect system libraries (`libstdc++`, `zlib`) NixOS doesn't put on the default library path, which breaks a plain `pip install` here. `flake.nix` fixes this declaratively instead of hand-patching `LD_LIBRARY_PATH` every time:
+
+```
+nix develop
+```
+
+This drops you into a shell with Python + those system libraries wired up correctly, auto-creates a `.venv`, and installs `requirements.txt` into it on first run. Everything after that (`python main.py`, etc.) works normally inside the shell.
