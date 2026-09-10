@@ -29,3 +29,9 @@ nix develop
 ```
 
 This drops you into a shell with Python + those system libraries wired up correctly, auto-creates a `.venv`, and installs `requirements.txt` into it on first run. Everything after that (`python main.py`, etc.) works normally inside the shell.
+
+## Next Steps
+
+- **Rewrite `main.py`.** The current version was written with an older, weaker version of Google Gemini and needs to be redone — planned as a hands-on exercise to actually learn how it works, not a delegated rewrite.
+- Fix the "only plays 1 player mode" limitation and the general "slightly broken state" mentioned above, once `main.py` is rebuilt.
+- Optional stretch, deferred for now: log Q-learning training telemetry (state/action/reward/next-state) to Supabase, and/or a pgvector-based similarity search over game states. Neither is committed to — the memory-map migration above was intentionally scoped as the minimal, real piece worth finishing first.
