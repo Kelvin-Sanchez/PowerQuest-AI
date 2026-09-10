@@ -5,11 +5,13 @@ Q learning model aimed at playing Power Quest for GBC. I expected most of the me
 
 https://docs.google.com/spreadsheets/d/15lx8YEUK4b-5sYlNhvxxmbK20SW4R7NoCAj1Fd_A5iY/edit?usp=sharing
 
-This sheet was the source of truth for memory addresses; it's now been migrated into Supabase (see below), which also fixes the codebase's dependency on a `pq_memory_map.py` that didn't exist in this repo.
+This sheet was the source of truth for memory addresses; it's now been migrated into Supabase (see below), which also fixes the codebase's dependency on a `pq_memory_map.py` that didn't exist in this repo. **If you just want to browse the known addresses without setting anything up**, see [`docs/memory_map.md`](docs/memory_map.md) (table) or [`docs/memory_map_reference.py`](docs/memory_map_reference.py) (plain constants) — no Supabase account needed for either.
 
 ## Memory Map (Supabase)
 
-Memory addresses now live in a Supabase Postgres table (`pq_memory_addresses`) instead of being hand-maintained in a static file. `pq_memory_map.py` loads every row from that table at import time and exposes it as a module-level constant (e.g. `pq_memory_map.GAME_STATE_FLAG`), so nothing else in the codebase (`game_state.py`, `main.py`) needed to change.
+Memory addresses now live in a Supabase Postgres table (`pq_memory_addresses`) instead of being hand-maintained in a static file. `pq_memory_map.py` loads every row from that table at import time and exposes it as a module-level constant (e.g. `pq_memory_map.GAME_STATE_FLAG`), so nothing else in the codebase (`game_state.py`, `main.py`) needed to change. This is the version the running agent actually uses.
+
+The `docs/` copies above are static snapshots of the same data for anyone who just wants to look, not run the project — if you update one, update the other.
 
 The table has Row Level Security enabled: `anon`/`authenticated` can only `SELECT`, since this is non-sensitive reference data the running game agent needs to read but should never be able to modify. Seeding is the one operation that needs to bypass RLS, so it uses the `service_role` key instead of the public anon key.
 
